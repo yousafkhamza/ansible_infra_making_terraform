@@ -38,7 +38,7 @@ echo "..................Welcome to the Script.................."
 echo "Let's start to create a Ansible Infrastructure through Terraform...."
 echo ""
 
-rm -f key* userdata.sh
+rm -f ansi* userdata.sh
 userdata=`cat .userdata.txt`
 touch userdata.sh
 cat <<EOF >userdata.sh
@@ -79,21 +79,22 @@ fi
 
 read -p "Please choose Your Ansible OS type (Redhat or Debian)[r/d]: " string
 
-if [[ -f key.pub ]]; then
-echo "key.pub is the key of your server and its created"
+ssh-keygen -b 2048 -t rsa -f ansi -q -N ""
+if [[ -f ansi.pub ]]; then
+echo ""
 else
-ssh-keygen -b 2048 -t rsa -f key -q -N ""
+ansipub=`cat ./ansi.pub`
 fi
 
-if [[ -f key.pub ]]; then
-ansikey=`cat key`
+if [[ -f ansi.pub ]]; then
+ansikey=`cat ansi`
 eo=EOF
 cat <<EOF >> userdata.sh
-cat <<EOF > /root/key.pem
+cat <<EOF > /root/ansible.pem
 $ansikey
 $eo
 
-sudo chmod 400 /root/key.pem
+sudo chmod 400 /root/ansible.pem
 rm -f txt
 EOF
 else
@@ -183,6 +184,8 @@ echo ""
 echo "................Thank_you................"
 echo "..............Yousaf K Hamza................"
 echo "..........yousaf.k.hamza@gmail.com................"
+echo "Please note that not run the setup.sh file again. its only one time usable in this directory."
+echo "If you need more please clone again and use with another direrctroy."
 ;;
 
 *)
