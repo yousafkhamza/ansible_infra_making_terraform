@@ -53,7 +53,8 @@ ctype           = "-CTYPE-"
 EOF
 
 echo ""
-printf "\033[0;31m Please note that please enter valid values (Region, Instane Type, Operating System Distributer [Redhat/Debian]) \033[0m\n";
+printf "\033[0;31m Please note that please valid values (Region, Instane Type, Operating System Distributer [Redhat/Debian]) \033[0m\n";
+printf "\033[0;31m                               Otherwise the script server is not working                                  \033[0m\n";
 echo ""
 read -p "Please specify your region: " reg
 if [ -z $reg  ]; then
