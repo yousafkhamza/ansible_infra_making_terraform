@@ -18,12 +18,12 @@ printf "\e[1;92m         / _ \ | '_ \/ __| | '_ \| |/ _ \_____| |   | | |/ _ \ '
 printf "\e[1;92m        / ___ \| | | \__ \ | |_) | |  __/_____| |___| | |  __/ | | | |_       \e[0m\n"
 printf "\e[1;92m       /_/   \_\_| |_|___/_|_.__/|_|\___|      \____|_|_|\___|_| |_|\__|      \e[0m\n"
 printf "\e[1;92m                                                                              \e[0m\n"
-printf "\e[1;92m                      ____       _                 _                          \e[0m\n"
-printf "\e[1;92m                     / ___|  ___| |_ _   _ _ __   (_)_ __                     \e[0m\n"
-printf "\e[1;92m                     \___ \ / _ \ __| | | | '_ \  | | '_ \                    \e[0m\n"
-printf "\e[1;92m                      ___) |  __/ |_| |_| | |_) | | | | | |                   \e[0m\n"
-printf "\e[1;92m                     |____/ \___|\__|\__,_| .__/  |_|_| |_|                   \e[0m\n"
-printf "\e[1;92m                                          |_|                                 \e[0m\n"
+printf "\e[1;92m                         ____       _                                         \e[0m\n"
+printf "\e[1;92m                        / ___|  ___| |_ _   _ _ __                            \e[0m\n"
+printf "\e[1;92m                        \___ \ / _ \ __| | | | '_ \                           \e[0m\n"
+printf "\e[1;92m                         ___) |  __/ |_| |_| | |_) |                          \e[0m\n"
+printf "\e[1;92m                        |____/ \___|\__|\__,_| .__/                           \e[0m\n"
+printf "\e[1;92m                                             |_|                              \e[0m\n"
 printf "\e[1;92m                _____                    __                                   \e[0m\n"
 printf "\e[1;92m               |_   _|__ _ __ _ __ __ _ / _| ___  _ __ _ __ ___               \e[0m\n"
 printf "\e[1;92m                 | |/ _ \ '__| '__/ _' | |_ / _ \| '__| '_ ' _ \              \e[0m\n"
@@ -52,6 +52,9 @@ mtype           = "-MTYPE-"
 ctype           = "-CTYPE-"
 EOF
 
+echo ""
+printf "\033[0;31m Please note that please enter valid values (Region, Instane Type, Operating System Distributer [Redhat/Debian]) \033[0m\n";
+echo ""
 read -p "Please specify your region: " reg
 if [ -z $reg  ]; then
 echo "No region value entered"
@@ -77,16 +80,18 @@ else
         sed -i "s/-CTYPE-/"$cty"/" ./terraform.tfvars
 fi
 
-read -p "Please choose Your Ansible OS type (Redhat or Debian)[r/d]: " string
+read -p "Please choose Your Ansible Operating System Distributer (Redhat or Debian) [R/D]: " string
 
 if [[ -f key.pub ]]; then
-echo "key.pub is the key of your server and its created"
+echo "key.pub is the key of your server and its already created"
 else
 ssh-keygen -b 2048 -t rsa -f key -q -N ""
+echo "Your keypair Name is (key.pem)"
+mv -f key key.pem
 fi
 
 if [[ -f key.pub ]]; then
-ansikey=`cat key`
+ansikey=`cat key.pem`
 eo=EOF
 cat <<EOF >> userdata.sh
 cat <<EOF > /root/key.pem
@@ -97,7 +102,7 @@ sudo chmod 400 /root/key.pem
 rm -f txt
 EOF
 else
-        echo "key file is not created"
+        echo "Key file is not created"
 fi
 
 #Setup Terrafrom under the current working directory
@@ -118,7 +123,7 @@ echo ""
 echo "Terraform downloading completed...................."
 echo ""
 sleep 2
-echo "start to connect provider.tf to terraform.........."
+echo "Start to Initialise with this directory with terraform.........."
 echo ""
 terraform init
 ;;
@@ -136,12 +141,12 @@ iptwo=`cat .a.txt | tail -n1`
 
 if [ -z $string  ]; then
         echo ""
-        echo "Please choose one environment"
+        echo "Please Choose one Operating System Distributer (Redhat/Debian)"
         echo ""
 else
 
 case "$string" in
-redhat|REDHAT|red|RED|hat|HAT|r|R)
+redhat|REDHAT|Redhat|RedHat|red|RED|hat|HAT|r|R)
 sed -i '/env/d'                 ./terraform.tfvars
 echo 'env       = "-value-"' >> ./terraform.tfvars
 sed -i "s/-value-/"linux"/"     ./terraform.tfvars
@@ -152,7 +157,7 @@ echo -e $iptwo 'ansible_user="ec2-user" ansible_port=22 ansible_ssh_private_key_
 EOF
 ;;
 
-debian|Debian|deb|DEB|d|D)
+debian|Debian|deb|DEBIAN|DEB|d|D)
 sed -i '/env/d'                  ./terraform.tfvars
 echo 'env       = "-value-"' >> ./terraform.tfvars
 sed -i "s/-value-/"ubuntu"/" ./terraform.tfvars
@@ -164,21 +169,30 @@ EOF
 ;;
 
 *)
-echo "Only chose production or development"
+echo "Unfortunately Redhat or Debian Distributers available"
+exit 1
 ;;
 esac
 fi
 
 echo ""
-read -p "Proceed to apply this to infrastructure [y|N]: " infra
+read -p "Proceed to apply Ansible servers to your AWS Cloud [y|N]: " infra
 case "$infra" in
 yes|YES|y|Y)
         terraform validate
-
+echo ""
+echo "Lets start to apply ansible infrastructure to your AWS Cloud"
+echo ""
+sleep 2
         terraform apply -auto-approve
 sleep 2
 echo ""
 echo "Your Ansible Infrastructure is functionable......................"
+echo "Ansible master server username is ec2-user"
+echo "The command is given below:"
+echo "ssh -i key.pem ec2-user@ansible-master-ip (Please check the ouput)"
+echo ""
+sleep 3
 echo ""
 echo "................Thank_you................"
 echo "..............Yousaf K Hamza................"
