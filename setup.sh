@@ -79,11 +79,10 @@ fi
 
 read -p "Please choose Your Ansible OS type (Redhat or Debian)[r/d]: " string
 
-ssh-keygen -b 2048 -t rsa -f key -q -N ""
 if [[ -f key.pub ]]; then
 echo "key.pub is the key of your server and its created"
 else
-ansipub=`cat ./key.pub`
+ssh-keygen -b 2048 -t rsa -f key -q -N ""
 fi
 
 if [[ -f key.pub ]]; then
