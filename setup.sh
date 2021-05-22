@@ -30,7 +30,7 @@ printf "\e[1;92m                 | |/ _ \ '__| '__/ _' | |_ / _ \| '__| '_ ' _ \
 printf "\e[1;92m                 | |  __/ |  | | | (_| |  _| (_) | |  | | | | | |             \e[0m\n"
 printf "\e[1;92m                 |_|\___|_|  |_|  \__,_|_|  \___/|_|  |_| |_| |_|             \e[0m\n"
 printf "\n"
-printf "\e[1;77m\e[45m      Ansible-Setup through terrafrom v1 Author: @yousafkhamza (Github)     \e[0m\n"
+printf "\e[1;77m\e[45m      Ansible-Infrastructure setup through terrafrom v1 Author: @yousafkhamza (Github|Instagram)       \e[0m\n"
 printf "\n"
 
 echo ""
@@ -52,7 +52,7 @@ ctype           = "-CTYPE-"
 EOF
 
 echo ""
-printf "\033[0;31m Please note that please valid values (Region, Instane Type, Operating System Distributer [Redhat/Debian]) \033[0m\n";
+printf "\033[0;31m  Please note that enter valid values (Region, Instane Type, Operating System Distributer [Redhat/Debian]) \033[0m\n";
 printf "\033[0;31m                               Otherwise the script server is not working                                  \033[0m\n";
 echo ""
 read -p "Please specify your region: " reg
