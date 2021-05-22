@@ -4,7 +4,7 @@
 
 resource "aws_key_pair" "keypair" {
   key_name   = "ansible"
-  public_key = file("ansi.pub")
+  public_key = file("key.pub")
   tags = {
     Name = "ansible"
   }
