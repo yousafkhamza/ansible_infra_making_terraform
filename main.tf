@@ -198,6 +198,69 @@ resource "aws_instance" "client-two-ub" {
 }
 
 #------------------------------------------------------
+#IAM Role creation
+#------------------------------------------------------
+#-----
+#IAM Role Creation
+#-----
+resource "aws_iam_role" "ansible_role" {
+  name = "ansible_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+
+  tags = {
+      tag-key = "tag-value"
+  }
+}
+
+#-----
+#Role Profile Cration for attached the same to Instance
+#-----
+
+resource "aws_iam_instance_profile" "ansible_profile" {
+  name = "ansible_profile"
+  role = "${aws_iam_role.ansible_role.name}"
+}
+
+#-----
+#EC2 Describing Profile Policy for IAM role
+#-----
+
+resource "aws_iam_role_policy" "ansible_policy" {
+  name = "ansible"
+  role = "${aws_iam_role.ansible_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ec2:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+#------------------------------------------------------
 # Create A ansible Master server
 #------------------------------------------------------
 resource "aws_instance" "master" {
@@ -206,7 +269,7 @@ resource "aws_instance" "master" {
   instance_type                = var.mtype
   key_name                     = aws_key_pair.keypair.id
   associate_public_ip_address  = true
-  iam_instance_profile         = "EC2toS3"
+  iam_instance_profile         = aws_iam_instance_profile.ansible_profile.name
   user_data 				           = file("userdata.sh")
   vpc_security_group_ids       = [ aws_security_group.ssh-master.id ]
   tags = {
