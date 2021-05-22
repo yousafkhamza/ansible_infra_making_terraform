@@ -38,11 +38,13 @@ echo "..................Welcome to the Script.................."
 echo "Let's start to create a Ansible Infrastructure through Terraform...."
 echo ""
 
-rm -f ansi* userdata.sh
+rm -f key* userdata.sh
 userdata=`cat .userdata.txt`
+touch userdata.sh
 cat <<EOF >userdata.sh
 $userdata
 EOF
+
 rm -f ./terraform.tfvars
 cat <<EOF >terraform.tfvars
 region          = "-REGION-"
@@ -77,22 +79,22 @@ fi
 
 read -p "Please choose Your Ansible OS type (Redhat or Debian)[r/d]: " string
 
-if [[ -f ansi.pub ]]; then
-echo "Key is already available"
+ssh-keygen -b 2048 -t rsa -f key -q -N ""
+if [[ -f key.pub ]]; then
+echo "key.pub is the key of your server and its created"
 else
-ssh-keygen -b 2048 -t rsa -f ansi -q -N ""
-ansipub=`cat ./ansi.pub`
+ansipub=`cat ./key.pub`
 fi
 
-if [[ -f ansi.pub ]]; then
-ansikey=`cat ansi`
+if [[ -f key.pub ]]; then
+ansikey=`cat key`
 eo=EOF
 cat <<EOF >> userdata.sh
-cat <<EOF > /root/ansible.pem
+cat <<EOF > /root/key.pem
 $ansikey
 $eo
 
-sudo chmod 400 /root/ansible.pem
+sudo chmod 400 /root/key.pem
 rm -f txt
 EOF
 else
@@ -122,7 +124,7 @@ echo ""
 terraform init
 ;;
 *)
-        ehco ""
+        echo ""
         echo "Please re-run the script or install terraform manually"
         exit 1
 ;;
@@ -132,13 +134,15 @@ fi
 #Linux or Ubuntu Setup
 ipone=`cat .a.txt | head -n1`
 iptwo=`cat .a.txt | tail -n1`
+
 if [ -z $string  ]; then
         echo ""
         echo "Please choose one environment"
         echo ""
 else
+
 case "$string" in
-redhat|REDHAT|Redhat|red|RED|hat|HAT|r|R)
+redhat|REDHAT|red|RED|hat|HAT|r|R)
 sed -i '/env/d'                 ./terraform.tfvars
 echo 'env       = "-value-"' >> ./terraform.tfvars
 sed -i "s/-value-/"linux"/"     ./terraform.tfvars
@@ -148,7 +152,8 @@ echo -e $ipone 'ansible_user="ec2-user" ansible_port=22 ansible_ssh_private_key_
 echo -e $iptwo 'ansible_user="ec2-user" ansible_port=22 ansible_ssh_private_key_file="/root/ansible.pem"' >> /root/hosts
 EOF
 ;;
-debian|Debian|DEBIAN|deb|DEB|d|D)
+
+debian|Debian|deb|DEB|d|D)
 sed -i '/env/d'                  ./terraform.tfvars
 echo 'env       = "-value-"' >> ./terraform.tfvars
 sed -i "s/-value-/"ubuntu"/" ./terraform.tfvars
@@ -158,6 +163,7 @@ echo -e $ipone 'ansible_user="ubuntu" ansible_port=22 ansible_ssh_private_key_fi
 echo -e $iptwo 'ansible_user="ubuntu" ansible_port=22 ansible_ssh_private_key_file="/root/ansible.pem"' >> /root/hosts
 EOF
 ;;
+
 *)
 echo "Only chose production or development"
 ;;
@@ -179,6 +185,7 @@ echo "................Thank_you................"
 echo "..............Yousaf K Hamza................"
 echo "..........yousaf.k.hamza@gmail.com................"
 ;;
+
 *)
         echo "Please re-run the script or terrafom apply manually"
 ;;
