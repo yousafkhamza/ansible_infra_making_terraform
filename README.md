@@ -49,7 +49,7 @@ The ansible infrastructure is created through terraform (IAC). All the details a
 > you can check the ansible master and client connection with the below ansible command (After infrastructure creation)
 - Login to your Ansible-Master server (_screenshot 5_) 
 ```sh
-ssh -i key.pem ec2-user@public_ip     <========= this will be printed so please use that same
+ssh -i key.pem ec2-user@public_ip     <========= this public_ip will be printed so please use that ip with the same
 ```
 - Client conncetion checking through Ansible (_screenshot 6_)
 ```sh
