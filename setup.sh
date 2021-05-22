@@ -147,8 +147,8 @@ echo 'env       = "-value-"' >> ./terraform.tfvars
 sed -i "s/-value-/"linux"/"     ./terraform.tfvars
 cat <<EOF >> userdata.sh
 echo "[amazon]" > /root/hosts
-echo -e $ipone 'ansible_user="ec2-user" ansible_port=22 ansible_ssh_private_key_file="/root/ansible.pem"' >> /root/hosts
-echo -e $iptwo 'ansible_user="ec2-user" ansible_port=22 ansible_ssh_private_key_file="/root/ansible.pem"' >> /root/hosts
+echo -e $ipone 'ansible_user="ec2-user" ansible_port=22 ansible_ssh_private_key_file="/root/key.pem"' >> /root/hosts
+echo -e $iptwo 'ansible_user="ec2-user" ansible_port=22 ansible_ssh_private_key_file="/root/key.pem"' >> /root/hosts
 EOF
 ;;
 
@@ -158,8 +158,8 @@ echo 'env       = "-value-"' >> ./terraform.tfvars
 sed -i "s/-value-/"ubuntu"/" ./terraform.tfvars
 cat <<EOF >> userdata.sh
 echo "[amazon]" > /root/hosts
-echo -e $ipone 'ansible_user="ubuntu" ansible_port=22 ansible_ssh_private_key_file="/root/ansible.pem"' >> /root/hosts
-echo -e $iptwo 'ansible_user="ubuntu" ansible_port=22 ansible_ssh_private_key_file="/root/ansible.pem"' >> /root/hosts
+echo -e $ipone 'ansible_user="ubuntu" ansible_port=22 ansible_ssh_private_key_file="/root/key.pem"' >> /root/hosts
+echo -e $iptwo 'ansible_user="ubuntu" ansible_port=22 ansible_ssh_private_key_file="/root/key.pem"' >> /root/hosts
 EOF
 ;;
 
