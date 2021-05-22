@@ -2,14 +2,16 @@
 [![Builds](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 ## Description:
-The ansible infrastructure is created through terraform (IAC). All the details are fetching through a bash script. So, you don't need to change anything manually all are working automatically but some values are appending with your answer. Also, the infrastructure includes one ansible master server (Constant Redhat Distributer), two ansible client servers (Choosable Redhat/Debian Distributer) please note that both client servers with the same distributor which you opt for. Furthermore, Terraform installation is included the script and It's working with your AWS cloud and your default VPC if anyone needs to connect VPC with the infrastructure please ping me via LinkedIn.
+The ansible infrastructure is created through terraform (IAC). All the details are fetching through a bash script. So, you don't need to change anything manually all are working automatically but some values are appending with your answer. Also, the infrastructure includes one ansible master server (Constant Redhat Distributer), two ansible client servers (Choosable Redhat/Debian Distributer) please note that both client servers with the same distributor which you opt for. In addition, you can choose both master/client's Instance type would you be like also you can use the infrastructure where you want. Furthermore, Terraform installation is included in the script and It's working with your AWS cloud and your default VPC if anyone needs to connect VPC with the infrastructure please ping me via LinkedIn.
 
 ## Feutures: 
 - Easy to use and create a ansible infrastructure (only two clients)
-- You can use the code at any location in AWS Cloud
+- Client operating system is choosable (Debian/Redhat)
+- Instance Type is choosable (Both Master/Client)
+- You can use this code at wherever in AWS Cloud
 - Terraform installation included 
 - Ansible installtion is included (Master)
-- Master server creates hosts file (with your client private IP) (/root/ -- hosts file location in master)
+- Master server creates hosts file (with your two clients private IP) (/root/ -- hosts file location in master)
 ## Used Languages:
 - Terraform - HCL (For Infrastructure Making)
 - Bash (For automating HCL infrastructure making)
