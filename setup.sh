@@ -34,9 +34,8 @@ printf "\e[1;77m\e[45m      Ansible-Setup through terrafrom v1 Author: @yousafkh
 printf "\n"
 
 echo ""
-echo "..................Welcome to the Script.................."
-echo "Let's start to create a Ansible Infrastructure through Terraform...."
-echo ""
+printf "\033[1;34m ..........................................Welcome to the Script.......................................... \033[0m\n";
+printf "\033[1;34m ......................Let's start to create a Ansible Infrastructure through Terraform................... \033[0m\n";
 
 rm -f key* userdata.sh
 userdata=`cat .userdata.txt`
@@ -58,24 +57,24 @@ printf "\033[0;31m                               Otherwise the script server is 
 echo ""
 read -p "Please specify your region: " reg
 if [ -z $reg  ]; then
-echo "No region value entered"
+echo "Please specify a AWS Region for further script running"
 exit 1
 else
         sed -i "s/-REGION-/"$reg"/" ./terraform.tfvars
         sed -i "s/-REGION-/"$reg"/" ./userdata.sh
 fi
 
-read -p "Please specify your Master instance tpye: " mty
+read -p "Please specify your Ansible Master instance tpye: " mty
 if [ -z $mty  ]; then
-echo "No master instance type value entered"
+echo "Please enter a instance type value for Master Ansible Server"
 exit 1
 else
         sed -i "s/-MTYPE-/"$mty"/" ./terraform.tfvars
 fi
 
-read -p "Please specify your Clients instance tpye: " cty
+read -p "Please specify your Ansible Clients instance tpye: " cty
 if [ -z $cty  ]; then
-echo "No master instance type value entered"
+echo "Please enter a instance type value for Ansible Client Servers"
 exit 1
 else
         sed -i "s/-CTYPE-/"$cty"/" ./terraform.tfvars
