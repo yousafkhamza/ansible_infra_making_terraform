@@ -53,6 +53,8 @@ ssh -i key.pem ec2-user@public_ip     <========= this public_ip will be printed 
 ```
 - Client conncetion checking through Ansible (_screenshot 6_)
 ```sh
+ansible  -i hosts all --list-hosts
+
 ansible -i hosts all -f 1 -m ping
 ```
 
